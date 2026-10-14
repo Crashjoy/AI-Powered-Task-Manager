@@ -1,0 +1,142 @@
+
+<section class="dashboard">
+  <header class="dashboard-header">
+    <h1>My Tasks</h1>
+    <p>Manage your tasks and stay productive.</p>
+  </header>
+
+  <div class="task-summary">
+    <div class="summary-card">
+      <span>Total tasks</span>
+      <strong>{{ totalCount() }}</strong>
+    </div>
+  
+    <div class="summary-card">
+      <span>Pending</span>
+      <strong>{{ pendingCount() }}</strong>
+    </div>
+  
+    <div class="summary-card">
+      <span>Completed</span>
+      <strong>{{ completedCount() }}</strong>
+    </div>
+  </div>
+
+  <form class="task-form" (ngSubmit)="addTask()">
+    <h2>Add a task</h2>
+
+    <label for="task-title">Title</label>
+    <input
+      id="task-title"
+      name="title"
+      type="text"
+      [(ngModel)]="newTask.title"
+      placeholder="What needs to be done?"
+      required
+    />
+
+    <label for="task-description">Description</label>
+    <textarea
+      id="task-description"
+      name="description"
+      [(ngModel)]="newTask.description"
+      placeholder="Add some details..."
+      rows="3"
+    ></textarea>
+
+    <label for="task-priority">Priority</label>
+    <select
+      id="task-priority"
+      name="priority"
+      [(ngModel)]="newTask.priority"
+    >
+      <option value="low">Low</option>
+      <option value="medium">Medium</option>
+      <option value="high">High</option>
+    </select>
+
+    <label for="task-due-date">Due date</label>
+    <input
+      id="task-due-date"
+      name="dueDate"
+      type="date"
+      [(ngModel)]="newTask.dueDate"
+    />
+
+    <button type="submit">Add task</button>
+  </form>
+
+  <div class="task-filters" aria-label="Filter tasks">
+    <button
+      type="button"
+      [class.active]="activeFilter() === 'all'"
+      (click)="activeFilter.set('all')"
+    >
+      All
+    </button>
+
+    <button
+      type="button"
+      [class.active]="activeFilter() === 'pending'"
+      (click)="activeFilter.set('pending')"
+    >
+      Pending
+    </button>
+
+    <button
+      type="button"
+      [class.active]="activeFilter() === 'completed'"
+      (click)="activeFilter.set('completed')"
+    >
+      Completed
+    </button>
+  </div>
+
+  <div class="task-list">
+    @for (task of filteredTasks(); track task.id) {
+      <article class="task-card">
+        <div class="task-details">
+          <h2>{{ task.title }}</h2>
+          <p>{{ task.description }}</p>
+        </div>
+
+        <div class="task-meta">
+          <span class="priority" [attr.data-priority]="task.priority">
+            {{ task.priority }}
+          </span>
+
+          <span class="due-date">Due: {{ task.dueDate }}</span>
+
+          <span class="status">
+            {{ task.completed ? 'Completed' : 'Pending' }}
+          </span>
+
+          <button
+            type="button"
+              (click)="toggleTask(task.id)"
+          >
+            {{ task.completed ? 'Mark pending' : 'Complete' }}
+          </button>
+
+          <button
+            type="button"
+            class="delete-button"
+            (click)="deleteTask(task.id)"
+          >
+            Delete
+          </button>
+
+        </div>
+      </article>
+    } @empty {
+        @if (tasks().length === 0) {
+          <p class="empty-state">No tasks yet. Add your first task above.</p>
+        } @else {
+          <p class="empty-state">
+            No {{ activeFilter() }} tasks. Try another filter.
+          </p>
+        }
+      }
+  </div>
+
+</section>

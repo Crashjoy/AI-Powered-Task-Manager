@@ -1,12 +1,13 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Sidebar } from './components/sidebar/sidebar';
+import { Dashboard } from './components/dashboard/dashboard';
 
 @Component({
-  imports: [RouterOutlet],
+  imports: [Sidebar, Dashboard],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
 export class App {
-  protected readonly title = signal('task-manager');
+  protected readonly title = signal('AI Task Manager');
 }
